@@ -44,7 +44,11 @@ describe("People", () => {
      * HINT: You need to alter the response from the api
      * You can do so for this test
      */
-
+    server.use(
+      rest.get(getPeople.info.path, (_, res, ctx) => {
+        return res(ctx.json([]));  // Return an empty array
+      })
+    );  
     await renderPeople();
 
     expect(screen.getByText("No People Available.")).toBeInTheDocument();

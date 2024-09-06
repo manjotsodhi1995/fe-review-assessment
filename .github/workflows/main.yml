@@ -20,11 +20,11 @@ jobs:
       - name: Check Typescript
         run: yarn tsc
 
-      # - name: Check Formatting // BONUS TASK
-      #   run: yarn prettier -c . // DON'T HAVE TO USE PRETTIER
+      - name: Check Formatting
+        run: yarn formatting
 
-      # - name: Check Linting // BONUS TASK
-      #   run: yarn eslint --ignore-path .gitignore src // DON'T HAVE TO USE ESLINT
+      - name: Check Linting // BONUS TASK
+        run: yarn linting
 
       - name: Run Unit and Integration Tests
         run: yarn test run
