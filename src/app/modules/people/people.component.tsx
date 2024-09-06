@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import { usePeopleQuery } from './query';
-import { Modal, Button } from 'react-daisyui';
 import './people.css';
 import { Person } from './model';
 import { v4 as uuidv4 } from 'uuid';
@@ -31,7 +30,7 @@ export function People() {
 
   // Filtering
   const filteredPeople = useMemo(() => {
-    return sortedPeople.filter(person => 
+    return sortedPeople.filter(person =>
       person.name.toLowerCase().includes(filter.toLowerCase())
     );
   }, [sortedPeople, filter]);
@@ -85,7 +84,7 @@ export function People() {
     const formData = new FormData(e.currentTarget);
     const movieTitles = formData.get('titles') as string;
     const releaseDates = formData.get('dates') as string;
-    
+
     const movies = movieTitles.split(',').map((title, index) => ({
       title: title.trim(),
       released: (releaseDates.split(',')[index] || '').trim(),
@@ -104,6 +103,19 @@ export function People() {
     setNewPerson({} as Person);
   };
 
+  const CustomModal = ({ open, onClose, children }: { open: boolean, onClose: () => void, children: React.ReactNode }) => {
+    if (!open) return null;
+    return (
+      <div className="custom-modal">
+        <div className="modal-overlay" onClick={onClose}></div>
+        <div className="modal-content">
+          <button className="close-button" onClick={onClose}>x</button>
+          {children}
+        </div>
+      </div>
+    );
+  };
+
   if (loading) {
     return <p>Fetching People...</p>;
   }
@@ -119,45 +131,43 @@ export function People() {
   return (
     <div className="flex flex-col">
       <div className="flex justify-end">
-        <Button onClick={handleModalOpen}>Add Person</Button>
+        <button onClick={handleModalOpen}>Add Person</button>
       </div>
-      <Modal open={isModalOpen} onClose={handleModalClose}>
-        <Modal.Header className="flex justify-between">
+      <CustomModal open={isModalOpen} onClose={handleModalClose}>
+        <h3 className="flex justify-between">
           <button type="button" className="text-gray-400 hover:text-gray-500" onClick={handleModalClose}>
             close
           </button>
-        </Modal.Header>
-        <Modal.Header>Add Person</Modal.Header>
-        <Modal.Body>
-          <form onSubmit={handleModalSubmit}>
-            <label>
-              Name:
-              <input type="text" name="name" value={newPerson.name} onChange={e => setNewPerson({ ...newPerson, name: e.target.value })} />
-            </label>
-            <label>
-              Show:
-              <input type="text" name="show" value={newPerson.show} onChange={e => setNewPerson({ ...newPerson, show: e.target.value })} />
-            </label>
-            <label>
-              Actor/Actress:
-              <input type="text" name="actor" value={newPerson.actor} onChange={e => setNewPerson({ ...newPerson, actor: e.target.value })} />
-            </label>
-            <label>
-              Date of birth:
-              <input type="date" name="dob" value={newPerson.dob} onChange={e => setNewPerson({ ...newPerson, dob: e.target.value })} />
-            </label>
-            <label>
-              Movie Titles (comma-separated):
-              <input type="text" name="titles" placeholder="e.g. Movie 1, Movie 2" />
-            </label>
-            <label>
-              Release Dates (comma-separated):
-              <input type="text" name="dates" placeholder="e.g. 2024-01-01, 2024-06-15" />
-            </label>
-            <Button type="submit">Add Person</Button>
-          </form>
-        </Modal.Body>
-      </Modal>
+        </h3>
+        <h3>Add Person</h3>
+        <form onSubmit={handleModalSubmit}>
+          <label>
+            Name:
+            <input type="text" name="name" value={newPerson.name} onChange={e => setNewPerson({ ...newPerson, name: e.target.value })} />
+          </label>
+          <label>
+            Show:
+            <input type="text" name="show" value={newPerson.show} onChange={e => setNewPerson({ ...newPerson, show: e.target.value })} />
+          </label>
+          <label>
+            Actor/Actress:
+            <input type="text" name="actor" value={newPerson.actor} onChange={e => setNewPerson({ ...newPerson, actor: e.target.value })} />
+          </label>
+          <label>
+            Date of birth:
+            <input type="date" name="dob" value={newPerson.dob} onChange={e => setNewPerson({ ...newPerson, dob: e.target.value })} />
+          </label>
+          <label>
+            Movie Titles (comma-separated):
+            <input type="text" name="titles" placeholder="e.g. Movie 1, Movie 2" />
+          </label>
+          <label>
+            Release Dates (comma-separated):
+            <input type="text" name="dates" placeholder="e.g. 2024-01-01, 2024-06-15" />
+          </label>
+          <button type="submit">Add Person</button>
+        </form>
+      </CustomModal>
       <input
         type="text"
         aria-label="Search"
@@ -178,7 +188,7 @@ export function People() {
               aria-sort={sortConfig.key === 'name' ? sortConfig.direction as 'ascending' | 'descending' | 'none' : 'none'}
               onClick={() => handleSort('name')}
             >
-              Name {sortConfig.key === 'name' && <svg fill="#000000" height="16px" width="16px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 490 490" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <polygon points="85.877,154.014 85.877,428.309 131.706,428.309 131.706,154.014 180.497,221.213 217.584,194.27 108.792,44.46 0,194.27 37.087,221.213 "></polygon> <polygon points="404.13,335.988 404.13,61.691 358.301,61.691 358.301,335.99 309.503,268.787 272.416,295.73 381.216,445.54 490,295.715 452.913,268.802 "></polygon> </g> </g></svg>}
+              Name {sortConfig.key === 'name' && <svg fill="#000000" height="16px" width="16px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 490 490"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <polygon points="85.877,154.014 85.877,428.309 131.706,428.309 131.706,154.014 180.497,221.213 217.584,194.27 108.792,44.46 0,194.27 37.087,221.213 "></polygon> <polygon points="404.13,335.988 404.13,61.691 358.301,61.691 358.301,335.99 309.503,268.787 272.416,295.73 381.216,445.54 490,295.715 452.913,268.802 "></polygon> </g> </g></svg>}
             </th>
             <th>Show</th>
             <th>Actor/Actress</th>
@@ -198,7 +208,7 @@ export function People() {
           ))}
         </tbody>
       </table>
-      <div>
+      <div className="pagination">
         <button
           onClick={() => handlePageChange(1)}
           disabled={currentPage === 1}
