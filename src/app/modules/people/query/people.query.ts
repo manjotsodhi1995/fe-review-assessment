@@ -13,7 +13,7 @@ interface PeopleQueryState {
 
 export const usePeopleQuery = (): PeopleQueryState => {
   const axios = useAxios();
-  const [state, setState] = useState<PeopleQueryState>({ loading: false });
+  const [state, setState] = useState<PeopleQueryState>({ loading: true });
 
   const fetchPeoples = async () => {
     try {
