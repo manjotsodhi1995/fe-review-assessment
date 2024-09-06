@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "test": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "formatting": "prettier --check .",
+    "formatting": "node scripts/format.js",
     "linting": "eslint --ignore-path .gitignore src"
   },
   "dependencies": {
